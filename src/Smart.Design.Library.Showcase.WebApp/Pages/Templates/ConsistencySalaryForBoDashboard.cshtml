@@ -14,36 +14,41 @@
             <div class="c-app-layout-inner__content">
                 @await Html.PartialAsync("Shared/_TemplatesMainTitle")
                 <div class="o-container o-container--large">
-                    <div class="o-container-vertical--padding-small u-position-relative">
-                        @(Html.Kendo().DateRangePickerFor(m => m.FromDate, m => m.ToDate)
-                            .Name("dateRangePicker")
-                            .Range(r => r
-                                .Start(DateTime.Now.AddDays(-7))
-                                .End(DateTime.Now))
-                            .HtmlAttributes(new { style = "width: 200px" })
-                        )
-                        @(Html.Kendo().NumericTextBoxFor(m => m.MinimumDelta)
-                            .Step(1)
-                            .Min(0)
-                            .Decimals(2)
-                            .Format("c")
-                            .Label(lb => lb
-                                .Content("Minimum delta")
-                                .Floating(true))
-                            .HtmlAttributes(new { style = "width: 150px" })
-                        )
-                        @(Html.Kendo().Button()
-                            .Name("generateReportBtn")
-                            .ThemeColor(ThemeColor.Primary)
-                            .Content("Generate report")
-                        )
-                        @(Html.Kendo().Button()
-                            .Name("fixIssuesBtn")
-                            .ThemeColor(ThemeColor.Primary)
-                            .Content("Fix issues")
-                        )
+                    <div class="o-container-vertical--padding-mini u-position-relative">
+                        <span>
+                            @(Html.Kendo().DateRangePickerFor(m => m.FromDate, m => m.ToDate)
+                                .Name("dateRangePicker")
+                                .HtmlAttributes(new { style = "width: auto; float: left" })
+                            )
+                        </span>
+                        <span class="u-spacer-left-xl">
+                            @(Html.Kendo().NumericTextBoxFor(m => m.MinimumDelta)
+                                .Step(1)
+                                .Min(0)
+                                .Decimals(2)
+                                .Format("c")
+                                .Label(lb => lb
+                                    .Content("Minimum delta")
+                                    .Floating(true))
+                                .HtmlAttributes(new { style = "width: 150px" })
+                            )
+                        </span>
+                        <span class="u-spacer-left-xl">
+                            @(Html.Kendo().Button()
+                                .Name("generateReportBtn")
+                                .ThemeColor(ThemeColor.Primary)
+                                .Content("Generate report")
+                            )
+                        </span>
+                        <span class="u-spacer-left-s">
+                            @(Html.Kendo().Button()
+                                .Name("fixIssuesBtn")
+                                .ThemeColor(ThemeColor.Primary)
+                                .Content("Fix issues")
+                            )
+                        </span>
                     </div>
-                    <div class="o-container-vertical--padding-small u-position-relative">
+                    <div class="o-container-vertical--padding-mini u-position-relative">
                         @(Html.Kendo().Grid<ConsistencySalaryModel>()
                             .Name("grid")
                             .Sortable()
@@ -60,6 +65,7 @@
                                 .PageSize(10)
                             )
                             .Pageable()
+                            .HtmlAttributes(new { style = "height: calc(100vh - 250px)" })
                         )
                     </div>
                 </div>
