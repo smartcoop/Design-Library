@@ -41,6 +41,8 @@
                                 .Name("generateReportBtn")
                                 .ThemeColor(ThemeColor.Primary)
                                 .Content("Generate report")
+                                .Events(e => e
+                                    .Click("OnClickGenerateReportBtn"))
                             )
                         </span>
                         <span class="u-spacer-left-s">
@@ -48,23 +50,32 @@
                                 .Name("fixIssuesBtn")
                                 .ThemeColor(ThemeColor.Primary)
                                 .Content("Fix issues")
+                                .Events(e => e
+                                    .Click("OnClickfixIssuesBtn"))
                             )
                         </span>
                     </div>
                     <div class="o-container-vertical--padding-mini u-position-relative">
                         @(Html.Kendo().Grid<ConsistencySalaryAnomaly>()
-                            .Name("grid")
+                            .Name("consistencySalaryAnomalyGrid")
                             .Sortable()
+                            .Filterable()
                             .Scrollable()
+                            .AllowCopy()
+                            .Selectable(s => s.Mode(GridSelectionMode.Multiple))
                             .Columns(columns =>
                             {
-                                columns.Bound(column => column.SamRawSalary);
-                                columns.Bound(column => column.ForHrmRawSalary);
+                                columns
+                                    .Bound(column => column.SamRawSalary)
+                                    .Format("{0:0.00$}");
+                                columns
+                                    .Bound(column => column.ForHrmRawSalary)
+                                    .Format("{0:0.00$}");
                             })
                             .DataSource(ds => ds
                                 .Ajax()
                                 .Read(r => r.Url("/Templates/ConsistencySalaryForBoDashboard?handler=Read").Data("forgeryToken"))
-                                .PageSize(10)
+                                .PageSize(25)
                             )
                             .Pageable()
                             .HtmlAttributes(new { style = "height: calc(100vh - 250px)" })
@@ -80,11 +91,22 @@
     $(document).ready(function () {
         console.log("ready!");
 
-        var grid = $("#grid").data("kendoGrid");
+        var grid = $("#consistencySalaryAnomalyGrid").data("kendoGrid");
         console.log("grid", grid);
     });
 
     function forgeryToken() {
         return kendo.antiForgeryTokens();
     }
+
+    function OnClickGenerateReportBtn(e)
+    {
+        kendo.alert("Click on 'GenerateReportBtn'. We need to do stuff.")
+    }
+
+    function OnClickfixIssuesBtn(e)
+    {
+        kendo.alert("Click on 'fixIssuesBtn'. We also need to do stuff.")
+    }
+
 </script>
