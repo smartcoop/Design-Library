@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Localization;
 using Newtonsoft.Json.Serialization;
 using Smart.Design.Library.Extensions;
 
@@ -33,5 +34,11 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseRequestLocalization(l => {
+    l.DefaultRequestCulture = new RequestCulture("fr-BE");
+    l.AddSupportedCultures("fr-BE", "nl-BE");
+    l.AddSupportedUICultures("fr-BE", "nl-BE");
+});
 
 app.Run();
