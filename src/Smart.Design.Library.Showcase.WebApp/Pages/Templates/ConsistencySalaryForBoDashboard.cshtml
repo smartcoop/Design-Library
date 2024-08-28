@@ -6,6 +6,9 @@
     ViewData["Title"] = "Consistency salary for BO dashboard";
 }
 
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+
 <div class="c-app-layout">
     @await Html.PartialAsync("Shared/_TemplatesHeader")
     <main class="u-maximize-width">
@@ -49,11 +52,10 @@
                         </span>
                     </div>
                     <div class="o-container-vertical--padding-mini u-position-relative">
-                        @(Html.Kendo().Grid<ConsistencySalaryModel>()
+                        @(Html.Kendo().Grid<ConsistencySalaryAnomaly>()
                             .Name("grid")
                             .Sortable()
                             .Scrollable()
-                            .AutoBind(false)
                             .Columns(columns =>
                             {
                                 columns.Bound(column => column.SamRawSalary);
@@ -61,7 +63,7 @@
                             })
                             .DataSource(ds => ds
                                 .Ajax()
-                                .Read(r => r.Url("/Grid/GridCrudOperations?handler=Read").Data("forgeryToken"))
+                                .Read(r => r.Url("/Templates/ConsistencySalaryForBoDashboard?handler=Read").Data("forgeryToken"))
                                 .PageSize(10)
                             )
                             .Pageable()
