@@ -55,13 +55,14 @@
                             )
                         </span>
                     </div>
-                    <div class="o-container-vertical--padding-mini u-position-relative">
+                    <div class="u-position-relative">
                         @(Html.Kendo().Grid<ConsistencySalaryAnomaly>()
                             .Name("consistencySalaryAnomalyGrid")
                             .Sortable()
                             .Filterable()
                             .Scrollable()
                             .AllowCopy()
+                            .Size(ComponentSize.Small)
                             .Selectable(s => s.Mode(GridSelectionMode.Multiple))
                             .ToolBar(x =>
                             {
@@ -87,7 +88,7 @@
                                 .PageSize(25)
                             )
                             .Pageable(p => p.PageSizes(new[] { 25, 100, 500 }))
-                            .HtmlAttributes(new { style = "height: calc(100vh - 250px); user-select: none;" })
+                            .HtmlAttributes(new { style = "height: calc(100vh - 225px); user-select: none;" })
                         )
                     </div>
                 </div>
