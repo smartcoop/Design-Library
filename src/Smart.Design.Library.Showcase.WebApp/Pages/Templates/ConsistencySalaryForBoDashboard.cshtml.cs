@@ -18,13 +18,10 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
 
     private static readonly List<ConsistencySalaryAnomaly> consistencySalaryAnomalies = new List<ConsistencySalaryAnomaly>();
 
-    public void OnGet()
-    {
-    }
-
     public void OnPostGenerateReport()
     {
-        for (int i = 0; i < 42; i++)
+        var newAnomalyCount = Convert.ToInt32((ToDate - FromDate).Days * MinimumDelta);
+        for (int i = 0; i < newAnomalyCount; i++)
         {
             consistencySalaryAnomalies.Add(
                 new ConsistencySalaryAnomaly

@@ -18,42 +18,43 @@
                 @await Html.PartialAsync("Shared/_TemplatesMainTitle")
                 <div class="o-container o-container--large">
                     <div class="o-container-vertical--padding-mini u-position-relative">
-                        <span>
-                            @(Html.Kendo().DateRangePickerFor(m => m.FromDate, m => m.ToDate)
-                                .Name("dateRangePicker")
-                                .HtmlAttributes(new { style = "width: auto; float: left" })
-                            )
-                        </span>
-                        <span class="u-spacer-left-xl">
-                            @(Html.Kendo().NumericTextBoxFor(m => m.MinimumDelta)
-                                .Step(1)
-                                .Min(0)
-                                .Decimals(2)
-                                .Format("c")
-                                .Label(lb => lb
-                                    .Content("Minimum delta")
-                                    .Floating(true))
-                                .HtmlAttributes(new { style = "width: 150px" })
-                            )
-                        </span>
-                        <span class="u-spacer-left-xl">
-                            @(Html.Kendo().Button()
-                                .Name("generateReportBtn")
-                                .ThemeColor(ThemeColor.Primary)
-                                .Content("Generate report")
-                                .Events(e => e
-                                    .Click("OnClickGenerateReportBtn"))
-                            )
-                        </span>
-                        <span class="u-spacer-left-s">
-                            @(Html.Kendo().Button()
-                                .Name("fixIssuesBtn")
-                                .ThemeColor(ThemeColor.Primary)
-                                .Content("Fix issues")
-                                .Events(e => e
-                                    .Click("OnClickfixIssuesBtn"))
-                            )
-                        </span>
+                        <form asp-page-handler="GenerateReport" method="post">
+                            <span>
+                                @(Html.Kendo().DateRangePickerFor(m => m.FromDate, m => m.ToDate)
+                                    .Name("dateRangePicker")
+                                    .HtmlAttributes(new { style = "width: auto; float: left" })
+                                )
+                            </span>
+                            <span class="u-spacer-left-xl">
+                                @(Html.Kendo().NumericTextBoxFor(m => m.MinimumDelta)
+                                    .Step(1)
+                                    .Min(0)
+                                    .Decimals(2)
+                                    .Format("c")
+                                    .Label(lb => lb
+                                        .Content("Minimum delta")
+                                        .Floating(true))
+                                    .HtmlAttributes(new { style = "width: 150px" })
+                                )
+                            </span>
+                            <span class="u-spacer-left-xl">
+                                @(Html.Kendo().Button()
+                                    .Name("generateReportBtn")
+                                    .ThemeColor(ThemeColor.Primary)
+                                    .Content("Generate report")
+                                    .HtmlAttributes(new { type = "submit" })
+                                    .Events(e => e.Click("forgeryToken"))
+                                )
+                            </span>
+                            <span class="u-spacer-left-s">
+                                @(Html.Kendo().Button()
+                                    .Name("fixIssuesBtn")
+                                    .ThemeColor(ThemeColor.Primary)
+                                    .Content("Fix issues")
+                                    .Events(e => e.Click("OnClickfixIssuesBtn"))
+                                )
+                            </span>
+                        </form>
                     </div>
                     <div class="u-position-relative">
                         @(Html.Kendo().Grid<ConsistencySalaryAnomaly>()
@@ -110,14 +111,6 @@
 
     function forgeryToken() {
         return kendo.antiForgeryTokens();
-    }
-
-    function OnClickGenerateReportBtn(e)
-    {
-        $.post("/Templates/ConsistencySalaryForBoDashboard?handler=GenerateReport", forgeryToken()).done(() => {
-            // full refresh of the page...
-            location.replace(location.href);
-        });
     }
 
     function OnClickfixIssuesBtn(e)
