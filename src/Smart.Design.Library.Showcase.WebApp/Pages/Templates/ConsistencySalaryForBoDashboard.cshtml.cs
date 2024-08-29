@@ -20,18 +20,25 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
 
     public void OnGet()
     {
-        if (consistencySalaryAnomalies.Count == 0)
+    }
+
+    public void OnGetGenerateReport()
+    {
+        for (int i = 0; i < 42; i++)
         {
-            for (int i = 0; i < 100; i++)
-            {
-                consistencySalaryAnomalies.Add(
-                    new ConsistencySalaryAnomaly {
-                        SamRawSalary = (i * 5.56f) % 10,
-                        ForHrmRawSalary = (i * 5.59f) % 10
-                    }
-                );
-            }
+            consistencySalaryAnomalies.Add(
+                new ConsistencySalaryAnomaly
+                {
+                    SamRawSalary = (i * 5.56f) % 10,
+                    ForHrmRawSalary = (i * 5.59f) % 10
+                }
+            );
         }
+    }
+
+    public void OnGetFixIssues()
+    {
+        consistencySalaryAnomalies.Clear();
     }
 
     // handlers for the Kendo grid

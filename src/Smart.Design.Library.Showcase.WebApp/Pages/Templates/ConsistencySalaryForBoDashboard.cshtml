@@ -113,12 +113,20 @@
 
     function OnClickGenerateReportBtn(e)
     {
-        kendo.alert("Click on 'GenerateReportBtn'. We need to do stuff.")
+        $.get("/Templates/ConsistencySalaryForBoDashboard?handler=GenerateReport").done(() => {
+            // full refresh of the page...
+            location.replace(location.href);
+        });
     }
 
     function OnClickfixIssuesBtn(e)
     {
-        kendo.alert("Click on 'fixIssuesBtn'. We also need to do stuff.")
+        kendo.confirm("All the issues will be magically fixed. Please confirm.")
+            .done(() => {
+                $.get("/Templates/ConsistencySalaryForBoDashboard?handler=FixIssues").done(() => {
+                    // full refresh of the page...
+                    location.replace(location.href);
+            });
+        });
     }
-
 </script>
