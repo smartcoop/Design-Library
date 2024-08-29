@@ -62,6 +62,7 @@
                             .Sortable()
                             .Filterable()
                             .Scrollable()
+                            .Resizable(r => r.Columns(true))
                             .AllowCopy()
                             .Size(ComponentSize.Small)
                             .Selectable(s => s.Mode(GridSelectionMode.Multiple))
@@ -72,11 +73,28 @@
                             .Columns(columns =>
                             {
                                 columns
+                                    .Bound(column => column.MemberReference);
+                                columns
+                                    .Bound(column => column.WorkerReference);
+                                columns
+                                    .Bound(column => column.ContractReference);
+                                columns
+                                    .Bound(column => column.ContractStartDate)
+                                    .Format("{0:d}");
+                                columns
+                                    .Bound(column => column.ContractDurationInDays);
+                                columns
                                     .Bound(column => column.SamRawSalary)
                                     .Format("{0:0.00$}");
                                 columns
                                     .Bound(column => column.ForHrmRawSalary)
                                     .Format("{0:0.00$}");
+                                columns
+                                    .Bound(column => column.RawSalaryDelta)
+                                    .Format("{0:0.00$}");
+                                columns
+                                    .Bound(column => column.IsActive)
+                                    .ClientTemplate("<input type='checkbox' #= IsActive? checked='checked': checked='' # class='chkbx' disabled='disabled'/>"); ;
                             })
                             .Excel(excel => excel
                                 .AllPages(true)
@@ -99,6 +117,11 @@
 </div>
 
 <script>
+    // trick to prevent form submission on refresh
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
     $(document).ready(function () {
         console.log("ready!");
 
