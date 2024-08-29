@@ -22,7 +22,7 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
     {
     }
 
-    public void OnGetGenerateReport()
+    public void OnPostGenerateReport()
     {
         for (int i = 0; i < 42; i++)
         {
@@ -36,7 +36,7 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
         }
     }
 
-    public void OnGetFixIssues()
+    public void OnPostFixIssues()
     {
         consistencySalaryAnomalies.Clear();
     }
