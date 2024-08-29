@@ -63,6 +63,10 @@
                             .Scrollable()
                             .AllowCopy()
                             .Selectable(s => s.Mode(GridSelectionMode.Multiple))
+                            .ToolBar(x =>
+                            {
+                                x.Excel();
+                            })
                             .Columns(columns =>
                             {
                                 columns
@@ -72,13 +76,18 @@
                                     .Bound(column => column.ForHrmRawSalary)
                                     .Format("{0:0.00$}");
                             })
+                            .Excel(excel => excel
+                                .AllPages(true)
+                                .Filterable(true)
+                                .FileName(DateTime.Now.ToString("yyyy-MM-dd HH'h'mm") + " - consistency salary issues.xlsx")
+                            )
                             .DataSource(ds => ds
                                 .Ajax()
                                 .Read(r => r.Url("/Templates/ConsistencySalaryForBoDashboard?handler=Read").Data("forgeryToken"))
                                 .PageSize(25)
                             )
-                            .Pageable()
-                            .HtmlAttributes(new { style = "height: calc(100vh - 250px)" })
+                            .Pageable(p => p.PageSizes(new[] { 25, 100, 500 }))
+                            .HtmlAttributes(new { style = "height: calc(100vh - 250px); user-select: none;" })
                         )
                     </div>
                 </div>
@@ -93,6 +102,9 @@
 
         var grid = $("#consistencySalaryAnomalyGrid").data("kendoGrid");
         console.log("grid", grid);
+
+        var btn = $("#fixIssuesBtn").data("kendoButton");
+        console.log("btn", btn);
     });
 
     function forgeryToken() {
