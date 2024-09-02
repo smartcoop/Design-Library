@@ -28,6 +28,25 @@
                                 )
                             </span>
                             <span class="u-spacer-left-xl">
+                                @(Html.Kendo().DropDownListFor(m => m.EntityId)
+                                    .DataTextField("Name")
+                                    .DataValueField("Id")
+                                    .HtmlAttributes(new { style = "width: 300px" })
+                                    .Height(350)
+                                    .Filter(FilterType.Contains)
+                                    .Label(lb => lb
+                                        .Content("Entity")
+                                        .Floating(true))
+                                    .DataSource(ds => ds
+                                        .Custom()
+                                        .Sort(s => s.Add("Name"))
+                                        .Transport(transport => transport
+                                            .Read(r => r.Url("/Templates/ConsistencyDayForBoDashboard?handler=ReadEntities").Data("GetForgeryToken")))
+                                        .ServerFiltering(false)
+                                    )
+                                )
+                            </span>
+                            <span class="u-spacer-left-xl">
                                 @(Html.Kendo().Button()
                                     .Name("generateReportBtn")
                                     .ThemeColor(ThemeColor.Primary)

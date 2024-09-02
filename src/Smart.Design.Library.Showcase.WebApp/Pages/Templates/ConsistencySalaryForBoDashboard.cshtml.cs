@@ -57,7 +57,7 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
         consistencySalaryAnomalies.RemoveAll(anomaly => anomalyIds.Contains(anomaly.Id));
     }
 
-    // handlers for the Kendo grid
+    // handler for the Kendo grid
     public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
     {
         return new JsonResult(consistencySalaryAnomalies.ToDataSourceResult(request));

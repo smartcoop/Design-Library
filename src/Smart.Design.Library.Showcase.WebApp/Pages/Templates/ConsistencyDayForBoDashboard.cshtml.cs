@@ -11,11 +11,43 @@ public class ConsistencyDayForBoDashboardModel : PageModel
     [BindProperty]
     public DateTime MonthAndYear { get; set; } = DateTime.Today;
 
+    [BindProperty]
+    public int EntityId { get; set; }
+
     private static readonly List<ConsistencyDayAnomaly> consistencyDayAnomalies = new List<ConsistencyDayAnomaly>();
 
+    private static readonly List<SmartEntity> smartEntities = new List<SmartEntity>();
+
+    public void OnGet()
+    {
+        if (smartEntities.Count == 0)
+        {
+            smartEntities.Add(new SmartEntity() { Id = 3, Name = "APMC" });
+            smartEntities.Add(new SmartEntity() { Id = 8, Name = "UBIK" });
+            smartEntities.Add(new SmartEntity() { Id = 16, Name = "Productions Associées" });
+            smartEntities.Add(new SmartEntity() { Id = 17, Name = "Secrétariat Pour Intermittents" });
+            smartEntities.Add(new SmartEntity() { Id = 18, Name = "Fondation SMartBE" });
+            smartEntities.Add(new SmartEntity() { Id = 19, Name = "MatLease" });
+            smartEntities.Add(new SmartEntity() { Id = 20, Name = "SMartImmo" });
+            smartEntities.Add(new SmartEntity() { Id = 21, Name = "Interim Paleis" });
+            smartEntities.Add(new SmartEntity() { Id = 22, Name = "Formateurs Associés" });
+            smartEntities.Add(new SmartEntity() { Id = 23, Name = "SmartCoop" });
+            smartEntities.Add(new SmartEntity() { Id = 25, Name = "Smart Productions" });
+            smartEntities.Add(new SmartEntity() { Id = 30, Name = "SMartSol" });
+            smartEntities.Add(new SmartEntity() { Id = 31, Name = "Tax Shelter Ethique" });
+            smartEntities.Add(new SmartEntity() { Id = 901, Name = "SCRL Cinéastes Associés" });
+        }
+    }
+
     public IActionResult OnPostGenerateReport()
-    {   
-        var newAnomalyCount = 10;
+    {
+
+        List<ConsistencyDayAnomalyType> anomalyTypes = Enum
+            .GetValues(typeof(ConsistencyDayAnomalyType))
+            .Cast<ConsistencyDayAnomalyType>()
+            .ToList();
+
+        var newAnomalyCount = 100;
         for (int i = 1; i <= newAnomalyCount; i++)
         {
             ConsistencyDayAnomaly anomaly = new ConsistencyDayAnomaly
@@ -27,16 +59,22 @@ public class ConsistencyDayForBoDashboardModel : PageModel
                 SmartWorkingHours = 7.6f,
                 ForHrmId = i * 943 % 10000,
                 ForHrmWorkingHours = 7.6f,
-                AnomalyType = ConsistencyDayAnomalyType.None
+                AnomalyType = anomalyTypes[i % anomalyTypes.Count]
             };
             
             consistencyDayAnomalies.Add(anomaly);
         }
 
-        return Page();
+        return Redirect("/Templates/ConsistencyDayForBoDashboard");
     }
 
-    // handlers for the Kendo grid
+    // handler for the Kendo dropdownlist
+    public JsonResult OnGetReadEntities()
+    {
+        return new JsonResult(smartEntities);
+    }
+
+    // handler for the Kendo grid
     public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
     {
         return new JsonResult(consistencyDayAnomalies.ToDataSourceResult(request));
@@ -58,6 +96,13 @@ public class ConsistencyDayAnomaly
     public float ForHrmWorkingHours { get; set; }
 
     public ConsistencyDayAnomalyType AnomalyType { get; set; }
+}
+
+public class SmartEntity
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; }
 }
 
 public enum ConsistencyDayAnomalyType
