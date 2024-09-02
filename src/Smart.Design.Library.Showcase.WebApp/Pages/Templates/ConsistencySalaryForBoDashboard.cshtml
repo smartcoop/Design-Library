@@ -66,9 +66,9 @@
                             .AllowCopy()
                             .Size(ComponentSize.Small)
                             .Selectable(s => s.Mode(GridSelectionMode.Multiple))
-                            .ToolBar(x =>
+                            .ToolBar(tb =>
                             {
-                                x.Excel();
+                                tb.Excel();
                             })
                             .Columns(columns =>
                             {

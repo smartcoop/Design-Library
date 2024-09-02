@@ -1,5 +1,7 @@
 ﻿@page
 @model Smart.Design.Library.Showcase.Pages.Templates.ConsistencyDayForBoDashboardModel
+@using Kendo.Mvc.TagHelpers
+@using Kendo.Mvc.UI
 @{
     ViewData["Title"] = "Consistency day for BO dashboard";
 }
@@ -12,28 +14,84 @@
             <div class="c-app-layout-inner__content">
                 @await Html.PartialAsync("Shared/_TemplatesMainTitle")
                 <div class="o-container o-container--large">
-                    <div class="o-container-vertical--padding-small u-position-relative">
-                        <div class="u-spacer-bottom-xl">
-                            <h2 class="c-h3">Heading 2</h2>
-                            <div class="o-card-grid-l">
-                                <div class="o-card-grid-l">
-                                    <div class="c-panel c-panel--border-r-sm">
-                                        <div class="c-panel__header c-panel__header-box o-block u-padding-vertical-m">
-                                            <h3 class="c-panel__title">Heading 3</h3>
-                                            </div>
-                                            <div class="c-panel__body u-padding-vertical">
-                                                <p class="u-spacer-bottom-s">
-                                                    Lorem ipsum dolor sit amet, <b>consectetur adipiscing elit,</b> sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                                </p>
-                                                <smart-button button-style="Primary" trailing-icon="Add" label="Button Label"></smart-button>
-                                            </div>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="o-container-vertical--padding-mini u-position-relative">
+                        <form asp-page-handler="GenerateReport" method="post">
+                            <span class="u-spacer-left-xl">
+                                @(Html.Kendo().Button()
+                                    .Name("generateReportBtn")
+                                    .ThemeColor(ThemeColor.Primary)
+                                    .Content("Generate report")
+                                    .HtmlAttributes(new { type = "submit" })
+                                    .Events(e => e.Click("GetForgeryToken"))
+                                )
+                            </span>
+                        </form>
+                    </div>
+                    <div class="u-position-relative">
+                        @(Html.Kendo().Grid<ConsistencyDayAnomaly>()
+                            .Name("consistencyDayAnomalyGrid")
+                            .Sortable()
+                            .Filterable()
+                            .Scrollable()
+                            .Resizable(r => r.Columns(true))
+                            .AllowCopy()
+                            .Size(ComponentSize.Small)
+                            .ToolBar(tb =>
+                            {
+                                tb.Excel();
+                            })
+                            .Columns(columns =>
+                            {
+                                columns
+                                    .Bound(column => column.ProviderReference);
+                                columns
+                                    .Bound(column => column.Date)
+                                    .Format("{0:d}");
+                                columns
+                                    .Bound(column => column.SmartWorkingHours);
+                                columns
+                                    .Bound(column => column.ForHrmId);
+                                columns
+                                    .Bound(column => column.ForHrmWorkingHours);
+                                columns
+                                    .Bound(column => column.AnomalyType);
+                            })
+                            .Excel(excel => excel
+                                .AllPages(true)
+                                .Filterable(true)
+                                .FileName(DateTime.Now.ToString("yyyy-MM-dd HH'h'mm") + " - consistency day issues.xlsx")
+                            )
+                            .DataSource(ds => ds
+                                .Ajax()
+                                .Read(r => r.Url("/Templates/ConsistencyDayForBoDashboard?handler=Read").Data("GetForgeryToken"))
+                                .PageSize(25)
+                            )
+                            .Pageable(p => p.PageSizes(new[] { 25, 100, 500 }))
+                            .HtmlAttributes(new { style = "height: calc(100vh - 225px); user-select: none;" })
+                        )
                     </div>
                 </div>
             </div>
         </div>
     </main>
 </div>
+
+<script>
+    // trick to prevent form submission on refresh
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+    // Kendo objects mapped to their related html elements
+    var anomalyKendoGrid = null;
+
+    // TODO: initialize all the "Kendo variables"
+    $(document).ready(function () {
+        var grid = $("#consistencyDayAnomalyGrid").data("kendoGrid");
+        console.log("grid", grid);
+    });
+
+    function GetForgeryToken() {
+        return kendo.antiForgeryTokens();
+    }
+</script>
