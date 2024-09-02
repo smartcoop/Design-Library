@@ -1,0 +1,39 @@
+﻿@page
+@model Smart.Design.Library.Showcase.Pages.Templates.ConsistencyDayForBoDashboardModel
+@{
+    ViewData["Title"] = "Consistency day for BO dashboard";
+}
+
+<div class="c-app-layout">
+    @await Html.PartialAsync("Shared/_TemplatesHeader")
+    <main class="u-maximize-width">
+        <div class="c-app-layout-inner">
+            @await Html.PartialAsync("Shared/_TemplatesSideMenu")
+            <div class="c-app-layout-inner__content">
+                @await Html.PartialAsync("Shared/_TemplatesMainTitle")
+                <div class="o-container o-container--large">
+                    <div class="o-container-vertical--padding-small u-position-relative">
+                        <div class="u-spacer-bottom-xl">
+                            <h2 class="c-h3">Heading 2</h2>
+                            <div class="o-card-grid-l">
+                                <div class="o-card-grid-l">
+                                    <div class="c-panel c-panel--border-r-sm">
+                                        <div class="c-panel__header c-panel__header-box o-block u-padding-vertical-m">
+                                            <h3 class="c-panel__title">Heading 3</h3>
+                                            </div>
+                                            <div class="c-panel__body u-padding-vertical">
+                                                <p class="u-spacer-bottom-s">
+                                                    Lorem ipsum dolor sit amet, <b>consectetur adipiscing elit,</b> sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                                </p>
+                                                <smart-button button-style="Primary" trailing-icon="Add" label="Button Label"></smart-button>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
