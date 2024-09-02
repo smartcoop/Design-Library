@@ -27,6 +27,8 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
         {
             ConsistencySalaryAnomaly anomaly = new ConsistencySalaryAnomaly
             {
+                Id = i,
+
                 MemberReference = (i * 549 % 1000).ToString(CultureInfo.InvariantCulture),
                 WorkerReference = (i * 487 % 500).ToString(CultureInfo.InvariantCulture),
                 ContractReference = (i * 943 % 10000).ToString(CultureInfo.InvariantCulture),
@@ -50,9 +52,9 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
         return Page();
     }
 
-    public void OnPostFixIssues()
+    public void OnPostFixIssues(int[] anomalyIds)
     {
-        consistencySalaryAnomalies.Clear();
+        consistencySalaryAnomalies.RemoveAll(anomaly => anomalyIds.Contains(anomaly.Id));
     }
 
     // handlers for the Kendo grid
@@ -64,6 +66,8 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
 
 public class ConsistencySalaryAnomaly
 {
+    public int Id { get; set; }
+
     public string MemberReference { get; set; } = string.Empty;
 
     public string WorkerReference { get; set; } = string.Empty;

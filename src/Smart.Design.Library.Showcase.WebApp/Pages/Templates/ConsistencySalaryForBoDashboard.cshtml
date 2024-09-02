@@ -43,7 +43,7 @@
                                     .ThemeColor(ThemeColor.Primary)
                                     .Content("Generate report")
                                     .HtmlAttributes(new { type = "submit" })
-                                    .Events(e => e.Click("forgeryToken"))
+                                    .Events(e => e.Click("GetForgeryToken"))
                                 )
                             </span>
                             <span class="u-spacer-left-s">
@@ -51,7 +51,7 @@
                                     .Name("fixIssuesBtn")
                                     .ThemeColor(ThemeColor.Primary)
                                     .Content("Fix issues")
-                                    .Events(e => e.Click("OnClickfixIssuesBtn"))
+                                    .Events(e => e.Click("ReactToClickOnFixIssuesBtn"))
                                 )
                             </span>
                         </form>
@@ -103,11 +103,12 @@
                             )
                             .DataSource(ds => ds
                                 .Ajax()
-                                .Read(r => r.Url("/Templates/ConsistencySalaryForBoDashboard?handler=Read").Data("forgeryToken"))
+                                .Read(r => r.Url("/Templates/ConsistencySalaryForBoDashboard?handler=Read").Data("GetForgeryToken"))
                                 .PageSize(25)
                             )
                             .Pageable(p => p.PageSizes(new[] { 25, 100, 500 }))
                             .HtmlAttributes(new { style = "height: calc(100vh - 225px); user-select: none;" })
+                            .Events(e => e.Change("ReactToSelectionChangeOnGrid"))
                         )
                     </div>
                 </div>
@@ -122,9 +123,13 @@
         window.history.replaceState(null, null, window.location.href);
     }
 
-    $(document).ready(function () {
-        console.log("ready!");
+    // Kendo objects mapped to their related html elements
+    var anomalyKendoGrid = null;
+    var generateReportKendoBtn = null;
+    var fixIssuesKendoBtn = null;
 
+    // TODO: initialize all the "Kendo variables"
+    $(document).ready(function () {
         var grid = $("#consistencySalaryAnomalyGrid").data("kendoGrid");
         console.log("grid", grid);
 
@@ -132,18 +137,46 @@
         console.log("btn", btn);
     });
 
-    function forgeryToken() {
+    function GetForgeryToken() {
         return kendo.antiForgeryTokens();
     }
 
-    function OnClickfixIssuesBtn(e)
-    {
-        kendo.confirm("All the issues will be magically fixed. Please confirm.")
-            .done(() => {
-                $.post("/Templates/ConsistencySalaryForBoDashboard?handler=FixIssues", forgeryToken()).done(() => {
-                    // full refresh of the page...
-                    location.replace(location.href);
-            });
-        });
+    function ReactToClickOnFixIssuesBtn(e) {
+        let selectedAnomalyDataItems = GetSelectedAnomalyDataItems();
+        if (selectedAnomalyDataItems.length > 0) {
+            kendo.confirm(`The ${selectedAnomalyDataItems.length} selected issue(s) will be magically fixed. Please confirm.`)
+                .done(() => {
+                    let anomalyIds = selectedAnomalyDataItems.map(dataItem => dataItem.get("Id"));
+                    $.post("/Templates/ConsistencySalaryForBoDashboard?handler=FixIssues",
+                        Object.assign(
+                            GetForgeryToken(),
+                            { anomalyIds: anomalyIds })
+                    ).done(() => {
+                        location.replace(location.href);
+                    });
+                });
+        }
+        else {
+            kendo.alert("Please select at least one row in the grid.")
+        }
+    }
+
+    function GetSelectedAnomalyDataItems() {
+        let selectedRowDataItems = [];
+
+        if (anomalyKendoGrid != null) {
+            let selectedRows = anomalyKendoGrid.select();
+            for (let selectedRow of selectedRows) {
+                let selectedRowDataItem = anomalyKendoGrid.dataItem(selectedRow);
+                selectedRowDataItems.push(selectedRowDataItem);
+            }
+        }
+
+        return selectedRowDataItems;
+    }
+
+    function ReactToSelectionChangeOnGrid(e) {
+        // TODO: must to handled in the "ready" function
+        anomalyKendoGrid = e.sender;
     }
 </script>
