@@ -16,6 +16,17 @@
                 <div class="o-container o-container--large">
                     <div class="o-container-vertical--padding-mini u-position-relative">
                         <form asp-page-handler="GenerateReport" method="post">
+                            <span>
+                                @(Html.Kendo().DatePickerFor(m => m.MonthAndYear)
+                                    .Start(CalendarView.Year)
+                                    .Depth(CalendarView.Year)
+                                    .Format("MMM yyyy")
+                                    .Label(lb => lb
+                                        .Content("Report month")
+                                        .Floating(true))
+                                    .HtmlAttributes(new { style = "width: auto" })   
+                                )
+                            </span>
                             <span class="u-spacer-left-xl">
                                 @(Html.Kendo().Button()
                                     .Name("generateReportBtn")

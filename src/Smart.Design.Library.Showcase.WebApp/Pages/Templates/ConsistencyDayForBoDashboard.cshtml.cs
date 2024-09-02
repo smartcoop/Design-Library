@@ -8,6 +8,9 @@ namespace Smart.Design.Library.Showcase.Pages.Templates;
 
 public class ConsistencyDayForBoDashboardModel : PageModel
 {
+    [BindProperty]
+    public DateTime MonthAndYear { get; set; } = DateTime.Today;
+
     private static readonly List<ConsistencyDayAnomaly> consistencyDayAnomalies = new List<ConsistencyDayAnomaly>();
 
     public IActionResult OnPostGenerateReport()
@@ -20,7 +23,7 @@ public class ConsistencyDayForBoDashboardModel : PageModel
                 Id = i,
 
                 ProviderReference = (i * 549 % 1000).ToString(CultureInfo.InvariantCulture),
-                Date = DateTime.Now,
+                Date = MonthAndYear,
                 SmartWorkingHours = 7.6f,
                 ForHrmId = i * 943 % 10000,
                 ForHrmWorkingHours = 7.6f,
