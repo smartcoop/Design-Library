@@ -14,8 +14,10 @@ public class ConsistencyDayForBoDashboardModel : PageModel
     [BindProperty]
     public int EntityId { get; set; }
 
-    private static readonly List<ConsistencyDayAnomaly> consistencyDayAnomalies = new List<ConsistencyDayAnomaly>();
+    public Dictionary<ConsistencyDayAnomalyType, int> AnomalyCountsByTypes { get; set; } = new Dictionary<ConsistencyDayAnomalyType, int>();
 
+    // mockup of the backend data
+    private static readonly List<ConsistencyDayAnomaly> consistencyDayAnomalies = new List<ConsistencyDayAnomaly>();
     private static readonly List<SmartEntity> smartEntities = new List<SmartEntity>();
 
     public void OnGet()
@@ -37,11 +39,16 @@ public class ConsistencyDayForBoDashboardModel : PageModel
             smartEntities.Add(new SmartEntity() { Id = 31, Name = "Tax Shelter Ethique" });
             smartEntities.Add(new SmartEntity() { Id = 901, Name = "SCRL Cinéastes Associés" });
         }
+
+        AnomalyCountsByTypes.Clear();
+        foreach (ConsistencyDayAnomalyType anomlyType in Enum.GetValues(typeof(ConsistencyDayAnomalyType)).Cast<ConsistencyDayAnomalyType>())
+        {
+            AnomalyCountsByTypes[anomlyType] = consistencyDayAnomalies.Count(a => a.AnomalyType == anomlyType);
+        }
     }
 
     public IActionResult OnPostGenerateReport()
     {
-
         List<ConsistencyDayAnomalyType> anomalyTypes = Enum
             .GetValues(typeof(ConsistencyDayAnomalyType))
             .Cast<ConsistencyDayAnomalyType>()

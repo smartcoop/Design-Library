@@ -66,10 +66,6 @@
                             .Resizable(r => r.Columns(true))
                             .AllowCopy()
                             .Size(ComponentSize.Small)
-                            .ToolBar(tb =>
-                            {
-                                tb.Excel();
-                            })
                             .Columns(columns =>
                             {
                                 columns
@@ -86,19 +82,27 @@
                                 columns
                                     .Bound(column => column.AnomalyType);
                             })
-                            .Excel(excel => excel
-                                .AllPages(true)
-                                .Filterable(true)
-                                .FileName(DateTime.Now.ToString("yyyy-MM-dd HH'h'mm") + " - consistency day issues.xlsx")
-                            )
                             .DataSource(ds => ds
                                 .Ajax()
                                 .Read(r => r.Url("/Templates/ConsistencyDayForBoDashboard?handler=Read").Data("GetForgeryToken"))
                                 .PageSize(25)
                             )
                             .Pageable(p => p.PageSizes(new[] { 25, 100, 500 }))
-                            .HtmlAttributes(new { style = "height: calc(100vh - 225px); user-select: none;" })
+                            .HtmlAttributes(new { style = "height: calc(100vh - 275px); user-select: none;" })
                         )
+                    </div>
+                    <div class="c-panel" style="margin-top: 10px">
+                        <div class="c-panel__body" style="padding-top: 5px; padding-bottom: 5px">
+                            @foreach (var CountByType in Model.AnomalyCountsByTypes)
+                            {
+                                <span style="font-size:14px">
+                                    <span style=" font-weight: bold">
+                                        @(CountByType.Key):
+                                    </span>
+                                    @(CountByType.Value),
+                                </span>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

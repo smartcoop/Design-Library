@@ -17,6 +17,7 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
     [BindProperty]
     public float MinimumDelta { get; set; } = 5.0f;
 
+    // mockup of the backend data
     private static readonly List<ConsistencySalaryAnomaly> consistencySalaryAnomalies = new List<ConsistencySalaryAnomaly>();
 
     public IActionResult OnPostGenerateReport()
