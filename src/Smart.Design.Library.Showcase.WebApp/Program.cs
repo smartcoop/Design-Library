@@ -1,9 +1,15 @@
+using Microsoft.AspNetCore.Localization;
+using Newtonsoft.Json.Serialization;
 using Smart.Design.Library.Extensions;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions {WebRootPath = "wwwroot"});
 builder.Services.AddKendo();
 
 // Add services to the container.
+builder.Services.AddMvc()
+    .AddNewtonsoftJson(options =>
+                       options.SerializerSettings.ContractResolver =
+                          new DefaultContractResolver());
 builder.Services.AddRazorPages();
 builder.Services.AddSmartDesign();
 builder.Services.AddKendo();
@@ -27,5 +33,10 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.UseRequestLocalization(l => {
+    l.DefaultRequestCulture = new RequestCulture("fr-BE");
+    l.AddSupportedCultures("fr-BE", "nl-BE");
+    l.AddSupportedUICultures("fr-BE", "nl-BE");
+});
 
 app.Run();
