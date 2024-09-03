@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Design.Console.Genera
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Design.Library.Showcase", "src\Smart.Design.Library.Showcase.WebApp\Smart.Design.Library.Showcase.csproj", "{2CA0A74E-7BDB-428B-B709-E0C86D4913D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smart.Unity.Design", "src\Smart.Unity.Design\Smart.Unity.Design.csproj", "{3A56C33A-5F38-441A-B36F-6B2708B0A0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smart.Unity.Design", "src\Smart.Unity.Design\Smart.Unity.Design.csproj", "{3A56C33A-5F38-441A-B36F-6B2708B0A0E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
