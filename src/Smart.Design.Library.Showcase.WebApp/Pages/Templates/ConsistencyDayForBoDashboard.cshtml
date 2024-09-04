@@ -116,15 +116,6 @@
         window.history.replaceState(null, null, window.location.href);
     }
 
-    // Kendo objects mapped to their related html elements
-    var anomalyKendoGrid = null;
-
-    // TODO: initialize all the "Kendo variables"
-    $(document).ready(function () {
-        var grid = $("#consistencyDayAnomalyGrid").data("kendoGrid");
-        console.log("grid", grid);
-    });
-
     function GetForgeryToken() {
         return kendo.antiForgeryTokens();
     }

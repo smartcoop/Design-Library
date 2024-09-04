@@ -131,7 +131,9 @@
 
     <script type="module" src="/_content/Smart.Unity.Design/SmartLib/js/bundle-client.js" asp-append-version="true"></script>
     <script type="module" src="/_content/Smart.Unity.Design/SmartLib/js/bundle-client-smart.js" asp-append-version="true"></script>
-    <script src="/_content/Smart.Unity.Design/ElementsForShowcase/bundle-prototype.js" asp-append-version="true"></script>
+
+    @* FRL, 2024/09/04: break some Kendo JS features if commented out. *@
+    @* <script src="/_content/Smart.Unity.Design/ElementsForShowcase/bundle-prototype.js" asp-append-version="true"></script> *@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
