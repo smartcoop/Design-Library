@@ -24,21 +24,23 @@ public class ForHrmErrorContractsOverviewModel : PageModel
             "Unexpected end of input",
             "Operation completed with warnings"
         };
+        var smartsBEEntities = Enum.GetValues(typeof(enmSMartBEEntity)).Cast<enmSMartBEEntity>().ToList();
+        var statuses = Enum.GetValues(typeof(enmStatus)).Cast<enmStatus>().ToList();
 
         for (int i = 0; i < numberOfRecords; i++)
         {
             var refPrest = $"REF{random.Next(1000, 9999)}"; // Random reference number
             var firstDate = DateTime.Now.AddDays(-random.Next(1, 30)); // Random date within the last 30 days
-            var eSMartBEEntity = random.Next(1, 10); // Random entity ID between 1 and 10
-            var eStatus = random.Next(0, 2); // Random status: 0 or 1
+            var eSMartBEEntity = smartsBEEntities[random.Next(smartsBEEntities.Count)]; // Random entity from enum
+            var eStatus = statuses[random.Next(statuses.Count)]; // Random status from enum
             var errorMessage = errorMessages[random.Next(errorMessages.Length)]; // Random error message
 
             errorQueue.Add(new ErrorQueue
             {
                 refPrest = refPrest,
                 firstDate = firstDate,
-                eSMartBEEntity = eSMartBEEntity,
-                eStatus = eStatus,
+                eSMartBEEntity = (int)eSMartBEEntity,
+                eStatus = (int)eStatus,
                 errorMessage = errorMessage
             });
         }
@@ -68,11 +70,45 @@ public class ErrorQueue
 {
 public string refPrest {  get; set; } = string.Empty;
 public DateTime firstDate { get; set;}
-
 public int eSMartBEEntity { get; set; }
-
 public int eStatus {  get; set; }
 public string errorMessage { get; set; } = string.Empty;
 
+    public string eSMartBEEntityName => ((enmSMartBEEntity)eSMartBEEntity).ToString();
+    public string eStatusName => ((enmStatus)eStatus).ToString();
+}
 
+public enum enmStatus
+{
+    netGroupProcess = 90, //utiliser pr changer le statut quand on parcour les prestations jusqu a la derniere
+    ignoreSocioQ = 93,
+    holdOn = 94, //when working on the dmfa, prest from the previous trimester are put on hold !
+    ignoreRefParentNotNull = 95,
+    ignoreOldProcess = 96, //ignorer car déjà traité par l'ancienne version de forhrm
+    ignoreRPI = 97,
+    ignore = 98,
+    processed = 99,
+    errorState = 100
+}
+
+public enum enmSMartBEEntity
+{
+    /*ATTENTION: Les valeurs de cette énum sont reprises dans 
+    une lookup column (SMartBE.MasterData.SMartGroupCompanies), il faut donc
+    mettre à jour cette table lorsque l'on modifie ici l'énumération. */
+    nonAttribue = 0,
+    PU = 1,
+    APMC = 3,
+    UBIK = 8,
+    PA = 16,
+    SI = 17,
+    SmartBE = 18,
+    MatLease = 19,
+    SmartImmo = 20,
+    InterimPaleis = 21,
+    FA = 22,
+    TS = 31,
+    SMartCoop = 23,
+    SmartProductions = 25,
+    SmartSol = 30
 }

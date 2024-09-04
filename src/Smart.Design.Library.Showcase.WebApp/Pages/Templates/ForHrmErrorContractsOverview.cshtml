@@ -39,8 +39,8 @@
                             {
                                 columns.Bound(e => e.refPrest).Title("Reference");
                                 columns.Bound(e => e.firstDate).Title("First Date").Format("{0:MM/dd/yyyy}");
-                                columns.Bound(e => e.eSMartBEEntity).Title("Entity");
-                                columns.Bound(e => e.eStatus).Title("Status");
+                                columns.Bound(e => e.eSMartBEEntityName).Title("Entity");
+                                columns.Bound(e => e.eStatusName).Title("Status");
                                 columns.Bound(e => e.errorMessage).Title("Error Message");
                             })
                             .Pageable()
