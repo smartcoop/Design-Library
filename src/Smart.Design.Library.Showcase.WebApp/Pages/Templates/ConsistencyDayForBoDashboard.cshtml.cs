@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Kendo.Mvc.Extensions;
 using Kendo.Mvc.UI;
@@ -14,6 +15,7 @@ public class ConsistencyDayForBoDashboardModel : PageModel
     [BindProperty]
     public int EntityId { get; set; }
 
+    // structure to speed up the display of a basic summary banner
     public Dictionary<ConsistencyDayAnomalyType, int> AnomalyCountsByTypes { get; set; } = new Dictionary<ConsistencyDayAnomalyType, int>();
 
     // mockup of the backend data
@@ -54,12 +56,13 @@ public class ConsistencyDayForBoDashboardModel : PageModel
             .Cast<ConsistencyDayAnomalyType>()
             .ToList();
 
+        // Let's generate some random stuff.
         var newAnomalyCount = 100;
         for (int i = 1; i <= newAnomalyCount; i++)
         {
             ConsistencyDayAnomaly anomaly = new ConsistencyDayAnomaly
             {
-                Id = i,
+                Id = consistencyDayAnomalies.Count + i,
 
                 ProviderReference = (i * 549 % 1000).ToString(CultureInfo.InvariantCulture),
                 Date = MonthAndYear,
@@ -72,6 +75,7 @@ public class ConsistencyDayForBoDashboardModel : PageModel
             consistencyDayAnomalies.Add(anomaly);
         }
 
+        // We reload the page. An easy solution but probably a bit rough...
         return Redirect("/Templates/ConsistencyDayForBoDashboard");
     }
 
@@ -109,14 +113,19 @@ public class SmartEntity
 {
     public int Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }
 
 public enum ConsistencyDayAnomalyType
 {
+    [Display(Name = "None")]
     None,
+    [Display(Name = "Day only exists in Smart")]
     DayOnlyExistsInSmart,
+    [Display(Name = "Day only exists in ForHrm")]
     DayOnlyExistsInForHrm,
+    [Display(Name = "Day has different hours")]
     DayHasDifferentHours,
+    [Display(Name = "Multiple days in ForHrm")]
     MultipleDaysInForHrm
 }

@@ -80,7 +80,8 @@
                                 columns
                                     .Bound(column => column.ForHrmWorkingHours);
                                 columns
-                                    .Bound(column => column.AnomalyType);
+                                    .Bound(column => column.AnomalyType)
+                                    .Width(200);
                             })
                             .DataSource(ds => ds
                                 .Ajax()
@@ -116,6 +117,7 @@
         window.history.replaceState(null, null, window.location.href);
     }
 
+    // mandatory function for most of the Kendo widgets
     function GetForgeryToken() {
         return kendo.antiForgeryTokens();
     }
