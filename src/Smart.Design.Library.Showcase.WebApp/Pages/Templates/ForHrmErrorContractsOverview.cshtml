@@ -20,7 +20,7 @@
                     <div class="o-container-vertical--padding-mini u-position-relative">
                         <form asp-page-handler="GetErrors" method="post">
                             <!-- Form Content Here -->
-                            <span class="u-spacer-left-xl">
+                            @* <span class="u-spacer-left-xl">
                                 @(Html.Kendo().Button()
                                     .Name("getErrorsBtn")
                                     .ThemeColor(ThemeColor.Primary)
@@ -28,17 +28,18 @@
                                     .HtmlAttributes(new { type = "submit" })
                                     .Events(e => e.Click("forgeryToken"))
                                     )
-                            </span>
+                            </span> *@
                         </form>
                     </div>
                     <div class="u-position-relative">
+                        <h3 class="c-panel__title">Queue Errors</h3>
                         <!-- Kendo Grid -->
                         @(Html.Kendo().Grid<ErrorQueue>()
                             .Name("errorQueueGrid")
                             .Columns(columns =>
                             {
                                 columns.Bound(e => e.refPrest).Title("Reference");
-                                columns.Bound(e => e.firstDate).Title("First Date").Format("{0:MM/dd/yyyy}");
+                                columns.Bound(e => e.firstDate).Title("First Date").Format("{0:dd/MM/yyyy}");
                                 columns.Bound(e => e.eSMartBEEntityName).Title("Entity");
                                 columns.Bound(e => e.eStatusName).Title("Status");
                                 columns.Bound(e => e.errorMessage).Title("Error Message");
@@ -49,10 +50,30 @@
                             .DataSource(dataSource => dataSource
                             .Ajax()
                             .PageSize(10)
-                            .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=Read").Data("forgeryToken"))
+                            .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=ReadErrorQueue").Data("forgeryToken"))
                             )
                             )
+                    </div>
 
+                    <div class="u-position-relative">
+                        <h3 class="c-panel__title">Activity / Hours ForHrm</h3>
+                        @(Html.Kendo().Grid<ProcessedActivity>()
+                            .Name("processedActivityGrid")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(a => a.Date).Title("Date").Format("{0:dd/MM/yyyy HH:mm}");
+                                columns.Bound(a => a.NumberOfSuccessfullyProcessed).Title("Nbr of CTR Successfully processed");
+                               
+                            })
+                            .Pageable()
+                            .Sortable()
+                            .Filterable()
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .PageSize(10)
+                            .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=ReadProcessedActivity").Data("forgeryToken"))
+                            )
+                            )
                     </div>
                 </div>
             </div>

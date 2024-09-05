@@ -7,10 +7,12 @@ namespace Smart.Design.Library.Showcase.Pages.Templates;
 
 public class ForHrmErrorContractsOverviewModel : PageModel
 {
-    public static readonly List<ErrorQueue> errorQueue = new List<ErrorQueue>();
+    public static List<ErrorQueue> errorQueue = new List<ErrorQueue>();
+    public static List<ProcessedActivity> activityHoursForHrm = new List<ProcessedActivity>();
 
-    public void InitializeWithRandomData(int numberOfRecords)
+    public void InitializeErrorWithRandomData(int numberOfRecords)
     {
+        errorQueue = new List<ErrorQueue>();
         var random = new Random();
         string[] errorMessages = {
             "Sample Error Message 1",
@@ -45,13 +47,36 @@ public class ForHrmErrorContractsOverviewModel : PageModel
             });
         }
     }
+    public static void InitializeactivityHoursForHrmWithRandomData(int numberOfRecords)
+    {
+        activityHoursForHrm = new List<ProcessedActivity>();
+        var random = new Random();
+
+        for (int i = 0; i < numberOfRecords; i++)
+        {
+            // Generate random Date (within the last 30 days)
+            DateTime randomDate = DateTime.Now.AddDays(-random.Next(0, 30));
+
+            // Generate random number for successfully processed activities (between 0 and 100)
+            int randomProcessedNumber = random.Next(0, 101);
+
+            // Create and add new ProcessedActivity to the list
+            activityHoursForHrm.Add(new ProcessedActivity
+            {
+                Date = randomDate,
+                NumberOfSuccessfullyProcessed = randomProcessedNumber
+            });
+        }
+
+    }
     public IActionResult OnGet()
     {
         // Initialize with some sample data
         //errorQueue.Add(new ErrorQueue { refPrest = "REF001", firstDate = DateTime.Now.AddDays(-5), eSMartBEEntity = 1, eStatus = 0, errorMessage = "Sample Error Message 1" });
         //errorQueue.Add(new ErrorQueue { refPrest = "REF002", firstDate = DateTime.Now.AddDays(-5), eSMartBEEntity = 1, eStatus = 0, errorMessage = "Sample Error Message 2" });
         //errorQueue.Add(new ErrorQueue { refPrest = "REF003", firstDate = DateTime.Now.AddDays(-5), eSMartBEEntity = 1, eStatus = 0, errorMessage = "Sample Error Message 3" });
-        InitializeWithRandomData(100);
+        InitializeErrorWithRandomData(128);
+        InitializeactivityHoursForHrmWithRandomData(90);
         return Page();
     }
 
@@ -59,25 +84,37 @@ public class ForHrmErrorContractsOverviewModel : PageModel
     {
         return new JsonResult(errorQueue);
     }
+    public JsonResult OnGetProcessedActivity()
+    {
+        return new JsonResult(activityHoursForHrm);
+    }
 
-    public JsonResult OnPostRead([DataSourceRequest] DataSourceRequest request)
+    public JsonResult OnPostReadErrorQueue([DataSourceRequest] DataSourceRequest request)
     {
         return new JsonResult(errorQueue.ToDataSourceResult(request));
+    }
+    public JsonResult OnPostReadProcessedActivity([DataSourceRequest] DataSourceRequest request)
+    {
+        return new JsonResult(activityHoursForHrm.ToDataSourceResult(request));
     }
 }
 
 public class ErrorQueue
 {
-public string refPrest {  get; set; } = string.Empty;
-public DateTime firstDate { get; set;}
-public int eSMartBEEntity { get; set; }
-public int eStatus {  get; set; }
-public string errorMessage { get; set; } = string.Empty;
+    public string refPrest { get; set; } = string.Empty;
+    public DateTime firstDate { get; set; }
+    public int eSMartBEEntity { get; set; }
+    public int eStatus { get; set; }
+    public string errorMessage { get; set; } = string.Empty;
 
     public string eSMartBEEntityName => ((enmSMartBEEntity)eSMartBEEntity).ToString();
     public string eStatusName => ((enmStatus)eStatus).ToString();
 }
-
+public class ProcessedActivity
+{
+    public DateTime Date { get; set; }
+    public int NumberOfSuccessfullyProcessed { get; set; }
+}
 public enum enmStatus
 {
     netGroupProcess = 90, //utiliser pr changer le statut quand on parcour les prestations jusqu a la derniere
@@ -90,12 +127,8 @@ public enum enmStatus
     processed = 99,
     errorState = 100
 }
-
 public enum enmSMartBEEntity
 {
-    /*ATTENTION: Les valeurs de cette énum sont reprises dans 
-    une lookup column (SMartBE.MasterData.SMartGroupCompanies), il faut donc
-    mettre à jour cette table lorsque l'on modifie ici l'énumération. */
     nonAttribue = 0,
     PU = 1,
     APMC = 3,
