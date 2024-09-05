@@ -1,17 +1,13 @@
-using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Localization;
-using Newtonsoft.Json.Serialization;
 using Smart.Design.Library.Extensions;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions {WebRootPath = "wwwroot"});
 builder.Services.AddKendo();
 
 // Add services to the container.
-builder.Services.AddMvc()
-    .AddNewtonsoftJson(options =>
-                       options.SerializerSettings.ContractResolver =
-                          new DefaultContractResolver());
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+    // Maintain the property names casing globally. Mandatory to ensure a smooth communication between the Kendo widgets and their data source methods.
+    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddSmartDesign();
 builder.Services.AddKendo();
 var app = builder.Build();
