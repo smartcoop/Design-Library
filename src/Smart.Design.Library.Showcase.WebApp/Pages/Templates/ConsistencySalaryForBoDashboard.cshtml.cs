@@ -22,13 +22,14 @@ public class ConsistencySalaryForBoDashboardModel : PageModel
 
     public IActionResult OnPostGenerateReport()
     {
+        // Let's generate some random stuff.
         var random = new Random();
         var newAnomalyCount = Convert.ToInt32((ToDate - FromDate).Days * 10);
         for (int i = 1; i <= newAnomalyCount; i++)
         {
             ConsistencySalaryAnomaly anomaly = new ConsistencySalaryAnomaly
             {
-                Id = i,
+                Id = consistencySalaryAnomalies.Count + i,
 
                 MemberReference = (i * 549 % 1000).ToString(CultureInfo.InvariantCulture),
                 WorkerReference = (i * 487 % 500).ToString(CultureInfo.InvariantCulture),

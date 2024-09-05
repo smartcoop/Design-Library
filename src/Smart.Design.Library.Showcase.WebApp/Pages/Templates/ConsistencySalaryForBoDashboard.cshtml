@@ -131,6 +131,7 @@
         console.log("anomalyKendoGrid", anomalyKendoGrid);
     });
 
+    // mandatory function for most of the Kendo widgets
     function GetForgeryToken() {
         return kendo.antiForgeryTokens();
     }
@@ -146,6 +147,7 @@
                             GetForgeryToken(),
                             { anomalyIds: anomalyIds })
                     ).done(() => {
+                        // We reload the page. An easy solution but probably a bit rough...
                         location.replace(location.href);
                     });
                 });
