@@ -15,7 +15,7 @@
                 @await Html.PartialAsync("Shared/_TemplatesMainTitle")
                 <div class="o-container o-container--large">
                     <div class="o-container-vertical--padding-mini u-position-relative">
-                        <form asp-page-handler="GenerateReport" method="post">
+                        <form asp-page-handler="GenerateReport" method="post" class="k-d-flex k-align-items-flex-end">
                             <span>
                                 @(Html.Kendo().DatePickerFor(m => m.MonthAndYear)
                                     .Start(CalendarView.Year)
