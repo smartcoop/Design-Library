@@ -4,7 +4,9 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions {WebRootPat
 builder.Services.AddKendo();
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+    // Maintain the property names casing globally. Mandatory to ensure a smooth communication between the Kendo widgets and their data source methods.
+    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddSmartDesign();
 builder.Services.AddKendo();
 var app = builder.Build();
