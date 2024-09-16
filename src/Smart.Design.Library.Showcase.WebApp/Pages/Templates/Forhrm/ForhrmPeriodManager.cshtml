@@ -1,0 +1,51 @@
+﻿@page
+@model Smart.Design.Library.Showcase.Pages.Templates.Forhrm.ForhrmPeriodManagerModel
+@using Kendo.Mvc.UI
+
+   @{
+        ViewData["Title"] = "Forhrm - Bloquer les périodes de clôture de lots de paie";
+    }
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@Html.AntiForgeryToken()
+
+@(
+
+Html.Kendo().Grid<Smart.Design.Library.Showcase.Pages.Templates.Forhrm.ForhrmPeriodModel>()
+    .Name("ForhrmPeriodGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Year).Title("Année");
+        columns.Bound(p => p.Month).Title("Mois");
+        columns.Bound(p => p.Blocked).Title("Période Bloquée").ClientTemplate("<input type='checkbox' #=Blocked ? 'checked' : '' # onclick='toggleBlockedCheckbox(this)' />");
+        columns.Bound(p => p.NbBlocked).Title("Nombre Contrats Bloqués");
+    })
+    .Pageable()
+    .Sortable()
+    .Filterable()
+    .DataSource(x => x
+        .Ajax()
+        .Read(r => r.Url("/Templates/Forhrm/ForhrmPeriodManager?handler=Read").Data("forgeryToken"))
+        .Update(u => u.Url("/Templates/Forhrm/ForhrmPeriodManager?handler=Update").Data("forgeryToken"))
+        .PageSize(12)
+        .Model(y =>
+        {
+            y.Id(z => new { z.Year, z.Month });
+        })
+    )
+    .Height(480)
+)
+
+<script>
+    function forgeryToken() {
+        return kendo.antiForgeryTokens();
+    }
+
+    function toggleBlockedCheckbox(checkbox) {
+        var grid = $("#ForhrmPeriodGrid").data("kendoGrid");
+        var row = $(checkbox).closest("tr");
+        var dataItem = grid.dataItem(row);
+        dataItem.set("Blocked", checkbox.checked);
+        grid.dataSource.sync();
+    }
+</script>
