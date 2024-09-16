@@ -17,20 +17,6 @@
             <div class="c-app-layout-inner__content">
                 @await Html.PartialAsync("Shared/_TemplatesMainTitle")
                 <div class="o-container o-container--large">
-                    <div class="o-container-vertical--padding-mini u-position-relative">
-                        <form asp-page-handler="GetErrors" method="post">
-                            <!-- Form Content Here -->
-                            @* <span class="u-spacer-left-xl">
-                                @(Html.Kendo().Button()
-                                    .Name("getErrorsBtn")
-                                    .ThemeColor(ThemeColor.Primary)
-                                    .Content("Get Errors")
-                                    .HtmlAttributes(new { type = "submit" })
-                                    .Events(e => e.Click("forgeryToken"))
-                                    )
-                            </span> *@
-                        </form>
-                    </div>
                     <div class="u-position-relative">
                         <h3 class="c-panel__title">Queue Errors</h3>
                         <!-- Kendo Grid -->
@@ -48,11 +34,11 @@
                             .Sortable()
                             .Filterable()
                             .DataSource(dataSource => dataSource
-                            .Ajax()
-                            .PageSize(10)
-                            .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=ReadErrorQueue").Data("forgeryToken"))
+                                .Ajax()
+                                .PageSize(10)
+                                .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=ReadErrorQueue").Data("forgeryToken"))
                             )
-                            )
+                        )
                     </div>
 
                     <div class="u-position-relative">
@@ -69,11 +55,11 @@
                             .Sortable()
                             .Filterable()
                             .DataSource(dataSource => dataSource
-                            .Ajax()
-                            .PageSize(10)
-                            .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=ReadProcessedActivity").Data("forgeryToken"))
+                                .Ajax()
+                                .PageSize(10)
+                                .Read(read => read.Url("/Templates/ForHrmErrorContractsOverview?handler=ReadProcessedActivity").Data("forgeryToken"))
                             )
-                            )
+                        )
                     </div>
                 </div>
             </div>
@@ -81,13 +67,8 @@
     </main>
 </div>
 
-
-
 <script>
-   
-
     function forgeryToken() {
         return kendo.antiForgeryTokens();
     }
-
 </script>

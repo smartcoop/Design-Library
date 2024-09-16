@@ -80,15 +80,6 @@ public class ForHrmErrorContractsOverviewModel : PageModel
         return Page();
     }
 
-    public JsonResult OnGetErrorQueueData()
-    {
-        return new JsonResult(errorQueue);
-    }
-    public JsonResult OnGetProcessedActivity()
-    {
-        return new JsonResult(activityHoursForHrm);
-    }
-
     public JsonResult OnPostReadErrorQueue([DataSourceRequest] DataSourceRequest request)
     {
         return new JsonResult(errorQueue.ToDataSourceResult(request));
